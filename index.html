@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 3 Warm-Up Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 10px;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz">
+            <!-- Quiz content will be injected here -->
+        </div>
+        <button id="next-btn" class="btn" disabled>Next</button>
+        <div id="result" class="score"></div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+        {
+            "question": "1. What is the primary purpose of descriptive statistics?",
+            "options": [
+                "To predict future trends",
+                "To summarize and interpret data",
+                "To clean missing data",
+                "To sort and organize datasets"
+            ],
+            "answer": "To summarize and interpret data"
+        },
+        {
+            "question": "2. Which measure is most resistant to outliers?",
+            "options": [
+                "Mean",
+                "Median",
+                "Mode",
+                "Standard Deviation"
+            ],
+            "answer": "Median"
+        },
+        {
+            "question": "3. What does a negatively skewed dataset indicate?",
+            "options": [
+                "Mean is greater than the median",
+                "Mean and median are equal",
+                "Mean is less than the median",
+                "Data is normally distributed"
+            ],
+            "answer": "Mean is less than the median"
+        },
+        {
+            "question": "4. Which financial ratio measures a company’s ability to pay short-term liabilities?",
+            "options": [
+                "Return on Assets (ROA)",
+                "Debt-to-Equity Ratio",
+                "Current Ratio",
+                "Asset Turnover Ratio"
+            ],
+            "answer": "Current Ratio"
+        },
+        {
+            "question": "5. In data visualization, which plot is best for identifying outliers?",
+            "options": [
+                "Histogram",
+                "Boxplot",
+                "Scatter Plot",
+                "Line Chart"
+            ],
+            "answer": "Boxplot"
+        },
+        {
+            "question": "6. When handling missing data, which method is preferred for numerical columns?",
+            "options": [
+                "Deleting rows with missing values",
+                "Filling missing values with the mean or median",
+                "Replacing missing values with zeros",
+                "Ignoring missing values"
+            ],
+            "answer": "Filling missing values with the mean or median"
+        }
+    ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizContainer = document.getElementById('quiz');
+        const nextButton = document.getElementById('next-btn');
+        const resultContainer = document.getElementById('result');
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+
+            quizContainer.innerHTML = `
+                <div class="question">${question.question}</div>
+                <ul class="options">
+                    ${question.options
+                        .map(
+                            (option) => `
+                                <li>
+                                    <label>
+                                        <input type="radio" name="option" value="${option}" />
+                                        ${option}
+                                    </label>
+                                </li>
+                            `
+                        )
+                        .join('')}
+                </ul>
+            `;
+
+            nextButton.disabled = true;
+            const options = document.querySelectorAll('input[name="option"]');
+            options.forEach(option => {
+                option.addEventListener('change', () => {
+                    nextButton.disabled = false;
+                });
+            });
+        }
+
+        function showResult() {
+            quizContainer.style.display = 'none';
+            nextButton.style.display = 'none';
+            resultContainer.innerHTML = `🎯 Warm-Up Quiz Completed! Your score is: ${score}/${quizQuestions.length}`;
+            if (score === quizQuestions.length) {
+                resultContainer.innerHTML += '<br>🏆 Perfect! You\'re ready for Session 4!';
+            } else if (score >= quizQuestions.length / 2) {
+                resultContainer.innerHTML += '<br>🎖️ Good job! A quick review will help you excel further.';
+            } else {
+                resultContainer.innerHTML += '<br>💪 Keep practicing! Go over the Session 4 materials again if needed.';
+            }
+        }
+
+        nextButton.addEventListener('click', () => {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            const question = quizQuestions[currentQuestionIndex];
+
+            if (selectedOption && selectedOption.value === question.answer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                displayQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        // Initialize the quiz
+        displayQuestion();
+    </script>
+</body>
+</html>
